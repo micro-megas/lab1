@@ -11,4 +11,4 @@ install:
   - pip3 install -r requirements.txt
 
 test_script:
-  - python3 ./flaskapp/wsgi.py
+  - bash ./flaskapp/start.sh
