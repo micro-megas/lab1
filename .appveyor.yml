@@ -7,8 +7,8 @@ build: false
 
 install:
   # - py --list
-  - py -m pip install --upgrade pip
-  - pip install -r requirements.txt
+  - python3 -m pip install --upgrade pip
+  - pip3 install -r requirements.txt
 
 test_script:
   - python ./flaskapp/wsgi.py
