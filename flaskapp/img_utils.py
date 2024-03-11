@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
+
 def alt_horizontal(image: np.ndarray, size: int):
     image1 = image.copy()
     height = image.shape[0]
@@ -85,7 +86,7 @@ def img_resize(fname: str, new_width: int):
     image.save(fname)
 
 
-def make_hist(in_fn: str, out_fn: str):
+def make_distr(in_fn: str, out_fn: str):
     image = Image.open(in_fn)
 
     (w, h) = image.size

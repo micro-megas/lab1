@@ -8,6 +8,8 @@ from wtforms import SubmitField, BooleanField, IntegerField
 # модули валидации полей формы
 from wtforms.validators import NumberRange
 from flask_wtf.file import FileField, FileAllowed, FileRequired
+# обязательно добавить для работы со стандартными шаблонами
+from flask_bootstrap import Bootstrap
 
 # Flask app
 app = Flask(__name__)
@@ -21,9 +23,6 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcE15MpAAAAALdaTdqDf2w3EcZGCUqpNgA6EjX5'
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcE15MpAAAAAIXMEr6N_q-Qs3Lzr_zbQDP3vPGT'
 app.config['RECAPTCHA_OPTIONS'] = {'theme': 'white'}
 
-# обязательно добавить для работы со стандартными шаблонами
-from flask_bootstrap import Bootstrap
-
 bootstrap = Bootstrap(app)
 
 
@@ -34,11 +33,13 @@ class ImageForm(FlaskForm):
     upload = FileField('Load image', validators=[
         FileRequired(),
         FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
-    #
+    # Чекбоксы для выбора направления
     horizontal = BooleanField('Horizontal')
     vertical = BooleanField('Vertical')
+    # Поле для ввода размера полосы,
+    # валидатор допускает только значения из диапазона [1..1000]
     size = IntegerField('Size', default=10, validators=[NumberRange(min=1, max=1000)])
-    # поле формы с capture
+    # поле формы с captcha
     recaptcha = RecaptchaField()
     # кнопка submit, для пользователя отображена как send
     submit = SubmitField('Upload')
@@ -49,22 +50,25 @@ class ImageForm(FlaskForm):
 # для устранения в имени символов типа / и т.д.
 from werkzeug.utils import secure_filename
 
-# подключаем наш модуль и переименовываем
-# для исключения конфликта имен
+# подключаем наш модуль
 import img_utils as utils
+
+
 # метод обработки запроса GET и POST от клиента
-@app.route("/alt",methods=['GET', 'POST'])
+@app.route("/alt", methods=['GET', 'POST'])
 def alt():
     # создаем объект формы
     form = ImageForm()
     # обнуляем переменные, передаваемые в форму
-    params = {'orig': None, 'alt': None, 'hist': None}
+    params = {'orig': None, 'alt': None, 'distr': None}
 
     # проверяем нажатие сабмит и валидацию введенных данных
     if form.validate_on_submit():
         # файлы с изображениями сохраняются в каталог static
         fname = secure_filename(form.upload.data.filename)
         ext = fname[fname.rindex("."):]
+        # переменные, передаваемые в форму, содержат
+        # имена файлов в каталоге ./static
         params['orig'] = './static/orig' + ext
         params['alt'] = './static/alt' + ext
         params['distr'] = './static/distr.jpeg'
@@ -74,7 +78,7 @@ def alt():
         # Alternate
         utils.img_alt(params['orig'], params['alt'], form.size.data, form.horizontal.data, form.vertical.data)
         # Distribution
-        utils.make_hist(params['orig'], params['distr'])
+        utils.make_distr(params['orig'], params['distr'])
 
     # передаем форму в шаблон, так же передаем имя файлов,
     # если был нажат сабмит, либо передадим falsy значения
