@@ -1,0 +1,96 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!-- задаем заголовок страницы -->
+{% block title %}Image transformation utility{% endblock %}
+<!-- блок body -->
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <p align="justify">
+                Это веб-приложение изменяет изображение путем обмена местами
+                чередующихся полос по вертикали и (или) по горизонтали.
+                Можно задать ширину полосы в пикселях (1 - 1000).
+                Дополнительно выводится график распределения цветов для
+                исходного изображения. Полученные изображения можно сохранить,
+                выбрав соответствующий пункт в контекстном меню браузера.
+            </p>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            {{ wtf.quick_form(form, method='post',enctype="multipart/form-data", action="alt")}}
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h2 align="center">Images are here:</h2>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+
+    {% if params.orig %}
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h4 align="center">Original Image</h4>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <img src={{params.orig}} class="img-rounded img-responsive" alt="Original Image"/>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h4 align="center">Transformed Image</h4>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <img src={{params.alt}} class="img-rounded img-responsive" alt="Transformed Image"/>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h4 align="center">Color Distribution</h4>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <img src={{params.distr}} class="img-rounded img-responsive" alt="Color Distribution"/>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    {% else %}
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <p>There is no image yet</p>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
