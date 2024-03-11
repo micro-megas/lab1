@@ -1,11 +1,7 @@
 # appveyor.yml - https://www.appveyor.com/docs/lang/python
 ---
 image:
-  - Script
-
-environment:
-  matrix:
-  - PY_PYTHON: 3.12
+  - Ubuntu2004
 
 build: false
 
