@@ -1,5 +1,5 @@
 echo start server
-/home/appveyor/.local/bin/waitress-serve --call 'wsgi:create_app' & APP_PID=$!
+waitress-serve --call 'wsgi:create_app' & APP_PID=$!
 echo $APP_PID
 sleep 5
 echo start client
