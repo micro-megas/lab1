@@ -11,4 +11,5 @@ install:
   - pip3 install -r requirements.txt
 
 test_script:
-  - bash ./flaskapp/start.sh
+  - cd flaskapp
+  - bash ./start.sh
